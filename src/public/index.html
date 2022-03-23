@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+    <title>Pagína de Teste</title>
+    <script>
+        const socket=io('http://localhost:3333',{
+            transports:['websocket']
+        });
+
+        socket.on('/', (res)=>{
+           escreverMensagemTela(res.usuario, res.mensagem)
+        });
+
+        function enviar(){
+
+            const usuario = document.querySelector("#usuario").value
+            const mensagem=document.querySelector("#mensagem").value
+
+
+            socket.emit('/', {
+                usuario,mensagem
+            })
+            console.log(usuario,mensagem)
+
+            escreverMensagemTela("Eu",mensagem)
+        }
+
+
+        function escreverMensagemTela(usuario,mensagem){
+
+            let mensagemHtml=document.querySelector("#mensagens").innerHTML
+            mensagemHtml+=`<p><strong>${usuario}</strong>: ${mensagem}</p>`
+
+            document.querySelector("#mensagens").innerHTML=mensagemHtml
+
+
+        }
+    </script>
+</head>
+<body>
+    <h3>Pagína de teste</h3>
+
+
+    <input type='text' id='usuario' placeholder="Usuario"><br><br>
+
+    <textarea name='' id='mensagem' cols='30' rows='10'></textarea><br>
+
+    <button onclick="enviar()">
+        Enviar
+    </button>
+
+    <h3>Mensagens</h3>
+    <div id="mensagens">
+
+    </div>
+</body>
+</html>
